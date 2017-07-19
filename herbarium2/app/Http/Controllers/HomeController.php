@@ -33,4 +33,9 @@ class HomeController extends Controller {
 		return view('home');
 	}
 
+	public function show($jumlah)
+	{
+		$jumlah= 1;
+		return view('home', ['nilai' =>  $jumlah]);
+	}
 }
