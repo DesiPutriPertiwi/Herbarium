@@ -11,8 +11,40 @@
 |
 */
 
-Route::get('/', 'ListController@show');
+Route::get('/', function () {
+    return view('dashboard');
+})->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'DashboardController@index');
+// Route::get('/system-management/{option}', 'SystemMgmtController@index');
+Route::get('/profile', 'ProfileController@index');
+
+Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+Route::resource('user-management', 'UserManagementController');
+
+Route::resource('invasive-management', 'InvasiveController');
+Route::post('invasive-management/search', 'InvasiveController@search')->name('invasive.search');
+
+Route::resource('system-management/department', 'DepartmentController');
+Route::post('system-management/department/search', 'DepartmentController@search')->name('department.search');
+
+Route::resource('system-management/division', 'DivisionController');
+Route::post('system-management/division/search', 'DivisionController@search')->name('division.search');
+
+Route::resource('system-management/country', 'CountryController');
+Route::post('system-management/country/search', 'CountryController@search')->name('country.search');
+
+Route::resource('system-management/state', 'StateController');
+Route::post('system-management/state/search', 'StateController@search')->name('state.search');
+
+Route::resource('system-management/city', 'CityController');
+Route::post('system-management/city/search', 'CityController@search')->name('city.search');
+
+Route::get('system-management/report', 'ReportController@index');
+Route::post('system-management/report/search', 'ReportController@search')->name('report.search');
+Route::post('system-management/report/excel', 'ReportController@exportExcel')->name('report.excel');
+Route::post('system-management/report/pdf', 'ReportController@exportPDF')->name('report.pdf');
+
+Route::get('avatars/{name}', 'EmployeeManagementController@load');

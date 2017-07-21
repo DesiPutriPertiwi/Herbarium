@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Container\Container;
 
 if ( ! function_exists('abort'))
 {
@@ -28,11 +29,12 @@ if ( ! function_exists('action'))
 	 *
 	 * @param  string  $name
 	 * @param  array   $parameters
+	 * @param  bool    $absolute
 	 * @return string
 	 */
-	function action($name, $parameters = array())
+	function action($name, $parameters = array(), $absolute = true)
 	{
-		return app('url')->action($name, $parameters);
+		return app('url')->action($name, $parameters, $absolute);
 	}
 }
 
@@ -45,14 +47,11 @@ if ( ! function_exists('app'))
 	 * @param  array   $parameters
 	 * @return mixed|\Illuminate\Foundation\Application
 	 */
-	function app($make = null, $parameters = array())
+	function app($make = null, $parameters = [])
 	{
-		if ( ! is_null($make))
-		{
-			return app()->make($make, $parameters);
-		}
+		if (is_null($make)) return Container::getInstance();
 
-		return Illuminate\Container\Container::getInstance();
+		return Container::getInstance()->make($make, $parameters);
 	}
 }
 
@@ -85,6 +84,19 @@ if ( ! function_exists('asset'))
 	}
 }
 
+if ( ! function_exists('auth'))
+{
+	/**
+	 * Get the available auth instance.
+	 *
+	 * @return \Illuminate\Contracts\Auth\Guard
+	 */
+	function auth()
+	{
+		return app('Illuminate\Contracts\Auth\Guard');
+	}
+}
+
 if ( ! function_exists('base_path'))
 {
 	/**
@@ -95,7 +107,7 @@ if ( ! function_exists('base_path'))
 	 */
 	function base_path($path = '')
 	{
-		return app()->make('path.base').($path ? '/'.$path : $path);
+		return app()->basePath().($path ? '/'.$path : $path);
 	}
 }
 
@@ -216,6 +228,20 @@ if ( ! function_exists('csrf_token'))
 	}
 }
 
+if ( ! function_exists('database_path'))
+{
+	/**
+	 * Get the database path.
+	 *
+	 * @param  string  $path
+	 * @return string
+	 */
+	function database_path($path = '')
+	{
+		return app()->databasePath().($path ? '/'.$path : $path);
+	}
+}
+
 if ( ! function_exists('delete'))
 {
 	/**
@@ -268,7 +294,7 @@ if ( ! function_exists('logger'))
 	 *
 	 * @param  string  $message
 	 * @param  array  $context
-	 * @return void
+	 * @return null|\Illuminate\Contracts\Logging\Log
 	 */
 	function logger($message = null, array $context = array())
 	{
@@ -592,15 +618,15 @@ if ( ! function_exists('env'))
 			case '(false)':
 				return false;
 
-			case 'null':
-			case '(null)':
-				return null;
-
 			case 'empty':
 			case '(empty)':
 				return '';
+
+			case 'null':
+			case '(null)':
+				return;
 		}
-		
+
 		if (Str::startsWith($value, '"') && Str::endsWith($value, '"'))
 		{
 			return substr($value, 1, -1);

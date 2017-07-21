@@ -13,12 +13,12 @@
 
 Route::get('/', function()
 {
-	return View::make('home');
+	return View::make('login');
 });
 
-Route::get('/charts', function()
+Route::get('/', function()
 {
-	return View::make('mcharts');
+	return View::make('home');
 });
 
 Route::get('/tables', function()

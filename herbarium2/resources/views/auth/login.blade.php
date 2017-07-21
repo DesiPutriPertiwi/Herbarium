@@ -21,17 +21,28 @@
 					<form class="form-horizontal" role="form" method="POST" action="/auth/login">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-						<div class="form-group">
-							<label class="col-md-4 control-label">E-Mail Address</label>
+						<div class="form-group {{ $errors->has('username') ? ' has-error' : ''}}">
+							<label class="col-md-4 control-label">Username</label>
+
 							<div class="col-md-6">
-								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
+								<input type="username" class="form-control" name="username" value="{{ old('username') }}">
+								@if ($errors->has('username'))
+									<span class="help-block">
+											<strong>{{ $errors->first('username') }}</strong>
+									</span>
+								@endif
 							</div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group {{ $errors->has('password') ? ' has-error' : ''}}">
 							<label class="col-md-4 control-label">Password</label>
 							<div class="col-md-6">
 								<input type="password" class="form-control" name="password">
+								@if ($errors->has('password'))
+									<span class="help-block">
+											<strong>{{ $errors->first('password') }}</strong>
+									</span>
+								@endif
 							</div>
 						</div>
 

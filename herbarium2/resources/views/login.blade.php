@@ -9,7 +9,7 @@
                         <form role="form">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                    <input class="form-control" placeholder="Username" name="username" type="text" autofocus>
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Password" name="password" type="password" value="">
@@ -23,7 +23,7 @@
                                 <a href="{{ url ('') }}" class="btn btn-lg btn-success btn-block">Login</a>
                             </fieldset>
                         </form>
-                    
+
                 @endsection
                 @include('widgets.panel', array('as'=>'login', 'header'=>true))
             </div>
